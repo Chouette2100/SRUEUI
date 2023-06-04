@@ -1,0 +1,7 @@
+SRUEUI
+go.mod
+go.sum
+*.txt
+*.swp
+*_cookies
+tasks.json
