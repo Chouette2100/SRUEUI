@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"log"
 
-	//	"math"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -49,10 +49,11 @@ import (
 	イベントのユーザ情報を更新する。
 
 	Ver.000AA000 新規作成
+	Ver.000AB000 イベント開始直後と終了直前のデータ取得の頻度を上げる。
 
 */
 
-const Version = "000AA000"
+const Version = "000AB000"
 
 func GetAndInsertEventRoomInfo(
 	client *http.Client,
@@ -361,14 +362,29 @@ func main() {
 	//      すべての処理が終了したらcookiejarを保存する。
 	defer jar.Save() //	忘れずに！
 
-	eventlist, status := srdblc.SelectLastEventList()
+	//	現在開催中のイベントのリストを得る
+	//	（開始前のものは含まない）
+	eventlist, status := srdblc.SelectCurEventList()
 	if status != 0 {
 		log.Printf("status=%d.\n", status)
 		os.Exit(1)
 	}
 
 	for _, event := range eventlist {
-		//	starttimeafternow, status := GetAndInsertEventRoomInfo(client, event.Event_ID, event.Fromorder, event.Toorder, &eventinf, &roominfolist)
+		log.Printf(" eventid=[%s] eventname=%s.\n", event.Event_ID, event.Event_name)
+		qnow := time.Now().Minute()/15	// このモジュールが15分に一度起動されることを前提としている。
+		hs := time.Since(event.Start_time).Hours()
+		he := time.Until(event.End_time).Hours()
+		h := math.Min(hs,he)
+		if h > 48.0 && qnow != 0 {
+				//	開始2日以後かつ終了2日以前の場合は１時間に1回データを取得する。
+				continue
+		}
+		if h > 6.0 && qnow % 2 != 0 {
+				//	開始6時間以後かつ終了6時間以前の場合は１時間に2回データを取得する。
+				continue
+		}
+
 		eventinf, status = srdblc.SelectEventInf(event.Event_ID)
 		if status != 0 {
 			log.Printf(" eventid=[%s] status=%d.\n", event.Event_ID, status)

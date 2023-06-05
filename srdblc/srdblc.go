@@ -29,9 +29,10 @@ import (
 
 /*
 Ver.01AA00	新規作成
+Ver.01AB00	現在開催中のイベントのみをたいしょうにする（SelectLastEventList() ==> SelectCurEventList()）
 */
 
-const Version = "01AA01"
+const Version = "01AB01"
 
 type DBConfig struct {
 	WebServer string `yaml:"WebServer"`
@@ -257,13 +258,14 @@ func OpenDb() (status int) {
 	return
 }
 
-func SelectLastEventList() (eventlist []Event_Inf, status int) {
+//	現在開催中のイベントのリストを作る
+func SelectCurEventList() (eventlist []Event_Inf, status int) {
 
 	var stmt *sql.Stmt
 	var rows *sql.Rows
 
 	sql := "select eventid, event_name, period, starttime, endtime, fromorder, toorder from event "
-	sql += " where endtime > now() "
+	sql += " where endtime > now() and starttime < now() "
 	stmt, Err = Db.Prepare(sql)
 	if Err != nil {
 		log.Printf("err=[%s]\n", Err.Error())
