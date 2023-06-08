@@ -68,6 +68,12 @@ sftp> put ServerConfig.yml
 みたいな感じで進めます。
 
 なお CGO_ENABLED=0 は最近VPSにもっていったときライブラリーのエラー（/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found）が出るようになったので入れています、
+[『SHOWROOM イベント 獲得ポイント一覧』(6) イベント参加ルームの情報更新](https://zenn.dev/chouette2100/books/d8c28f8ff426b7/viewer/d9f919)
+4
+​
+5
+----------------------
+6
 
 VPSの方が
 ```
