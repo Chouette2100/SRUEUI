@@ -68,14 +68,9 @@ sftp> put ServerConfig.yml
 みたいな感じで進めます。
 
 なお CGO_ENABLED=0 は最近VPSにもっていったときライブラリーのエラー（/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found）が出るようになったので入れています、
-[『SHOWROOM イベント 獲得ポイント一覧』(6) イベント参加ルームの情報更新](https://zenn.dev/chouette2100/books/d8c28f8ff426b7/viewer/d9f919)
-4
-​
-5
-----------------------
-6
 
 VPSの方が
+
 ```
 ldd (Ubuntu GLIBC 2.31-0ubuntu9.9) 2.31
 ```
@@ -84,6 +79,7 @@ ldd (Ubuntu GLIBC 2.31-0ubuntu9.9) 2.31
 ```
 ldd (Ubuntu GLIBC 2.35-0ubuntu3.1) 2.35
 ```
+
 なので GLIBC_2.32 以上が必要ということでしょうか。
 
 Goの場合ロードモジュールは必要なライブラリーをぜんぶ持ってるはず、なぜ？、ということでざっとググったところ、こういうエラーが起きるのはnet/http などのパッケージを使った場合内部的にはCライブラリを使う方法と純粋なGoですませる方法があり、何もしないと（CGO_ENABLED=0 を指定しないと）前者の方法になりCライブラリーがダイナミックリンクされてしまう、というのが原因のようです。このあたりの事情は正直よくわかってません。すみません。
