@@ -1,6 +1,6 @@
 # SRUEUI
 
-[『SHOWROOM イベント 獲得ポイント一覧』(1) 関連ソースの公開について](https://zenn.dev/chouette2100/books/d8c28f8ff426b7/viewer/4fccae)
+[『SHOWROOM イベント 獲得ポイント一覧』(6) イベント参加ルームの情報更新](https://zenn.dev/chouette2100/books/d8c28f8ff426b7/viewer/d9f919)
 
 ----------------------
 
